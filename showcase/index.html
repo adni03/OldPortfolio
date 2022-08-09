@@ -239,7 +239,7 @@ To improve the accuracy of the model, I used GridSearchCV with cross-validation 
   <a href="#facial-emotion-recognition" class="h-anchor" aria-hidden="true">#</a>
 </h2>
 <p><img src="https://raw.githubusercontent.com/adni03/Portfolio/main/img/fer_1.png" alt=""></p>
-<p>The goal of this project was to classify images of human faces into one of seven basic emotions. To do so, I used Convolutional Neural Networks as the advantage it had over its precedessors is that it can automatically detect important features without human intervention. CNNs are computationally efficient as well due to the special convolution and pooling operations.</p>
+<p>The goal of this project was to classify images of human faces into one of seven basic emotions. To do so, I used Convolutional Neural Networks as the advantage it had over its precedessors is that it can detect important features without human intervention. CNNs are computationally efficient as well due to the special convolution and pooling operations.</p>
 <ol>
 <li>
 <h4 id="the-dataset">
@@ -253,59 +253,49 @@ To improve the accuracy of the model, I used GridSearchCV with cross-validation 
   The Model:
   <a href="#the-model" class="h-anchor" aria-hidden="true">#</a>
 </h4>
-<p>The model used for this project is shown below. It consists of an input layer, three hidden layers, a flatten layer and finally an output layer. This project was done using keras and tensorflow on Google Colab.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"> model <span style="color:#f92672">=</span> Sequential()
+<p>A ResNet50 architecture was used as the Convolutional Neural Network which was pretrained on the ImageNet dataset. This dataset has 1000 classes but for the case of facial emotion recognition, there are only 7. Hence, to fine tune the network, the shallower layers were frozen and the model was trained using the training set. The building of the fine-tuned network is shown below:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fer_model_fine_tune</span>(base_model, input_shape):
+ fine_tune_start <span style="color:#f92672">=</span> <span style="color:#ae81ff">155</span>
 
- <span style="color:#75715e"># input layer</span>
- model<span style="color:#f92672">.</span>add(Conv2D(num_features<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>, kernel_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>), activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, input_shape<span style="color:#f92672">=</span>(width,height,<span style="color:#ae81ff">1</span>)))
- model<span style="color:#f92672">.</span>add(Conv2D(num_features, kernel_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>), activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>))
- model<span style="color:#f92672">.</span>add(BatchNormalization())
- model<span style="color:#f92672">.</span>add(MaxPooling2D(pool_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)))
- model<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.25</span>))
+ <span style="color:#75715e"># Freezing all layers before the fine_tune_start layer</span>
+ <span style="color:#66d9ef">for</span> layer <span style="color:#f92672">in</span> base_model<span style="color:#f92672">.</span>layers[: fine_tune_start]:
+     layer<span style="color:#f92672">.</span>trainable <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
 
- <span style="color:#75715e"># 1st hidden layer</span>
- model<span style="color:#f92672">.</span>add(Conv2D(<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>num_features, kernel_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>), activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>))
- model<span style="color:#f92672">.</span>add(BatchNormalization())
- model<span style="color:#f92672">.</span>add(MaxPooling2D(pool_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)))
- model<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.25</span>))
+ <span style="color:#75715e"># declaring the input</span>
+ inputs <span style="color:#f92672">=</span> Input(shape<span style="color:#f92672">=</span>input_shape)
 
- <span style="color:#75715e"># 2nd hidden layer</span>
- model<span style="color:#f92672">.</span>add(Conv2D(<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>num_features, kernel_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>), activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, kernel_regularizer<span style="color:#f92672">=</span>l2(<span style="color:#ae81ff">0.01</span>)))
- model<span style="color:#f92672">.</span>add(BatchNormalization())
- model<span style="color:#f92672">.</span>add(MaxPooling2D(pool_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)))
- model<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.25</span>))
+ <span style="color:#75715e"># obtaining image embeddings from the second last layer</span>
+ x <span style="color:#f92672">=</span> base_model(inputs, training<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
 
- <span style="color:#75715e"># 3rd hidden layer</span>
- model<span style="color:#f92672">.</span>add(Conv2D(<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>num_features, kernel_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>), activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, kernel_regularizer<span style="color:#f92672">=</span>l2(<span style="color:#ae81ff">0.01</span>)))
- model<span style="color:#f92672">.</span>add(BatchNormalization())
- model<span style="color:#f92672">.</span>add(MaxPooling2D(pool_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)))
- model<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.25</span>))
+ <span style="color:#75715e"># adding global avg pooling</span>
+ x <span style="color:#f92672">=</span> GlobalAvgPool2D()(x)
 
- <span style="color:#75715e"># flatten layer</span>
- model<span style="color:#f92672">.</span>add(Flatten())
- model<span style="color:#f92672">.</span>add(Dense(<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>num_features, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>))
- model<span style="color:#f92672">.</span>add(BatchNormalization())
- model<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.25</span>))
+ <span style="color:#75715e"># including dropout with prob=0.2</span>
+ x <span style="color:#f92672">=</span> Dropout(rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>)(x)
 
- model<span style="color:#f92672">.</span>add(Dense(<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>num_features, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>))
- model<span style="color:#f92672">.</span>add(BatchNormalization())
- model<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.25</span>))
+ <span style="color:#75715e"># adding a flatten layer</span>
+ x <span style="color:#f92672">=</span> Flatten()(x)
 
- <span style="color:#75715e"># output layer</span>
- model<span style="color:#f92672">.</span>add(Dense(classes, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>))
+ <span style="color:#75715e"># adding the prediction layer with 7 units, softmax activation</span>
+ prediction_layer <span style="color:#f92672">=</span> Dense(units<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)(x)
+
+ <span style="color:#75715e"># outputs</span>
+ outputs <span style="color:#f92672">=</span> prediction_layer
+
+ model <span style="color:#f92672">=</span> Model(inputs, outputs)
+
+ <span style="color:#66d9ef">return</span> model
 </code></pre></div></li>
 <li>
 <h4 id="training-and-testing-1">
   Training and Testing:
   <a href="#training-and-testing-1" class="h-anchor" aria-hidden="true">#</a>
 </h4>
-<p>The model was trained for 5, 10, 20, 30, 40, 50, and 100 epochs with a batch size of 64. For each training cycle, a graph of validation and training accuracy as well as validation and training loss was plotted. In the end, the model produced an accuracy of 60.5% on training for 100 epochs.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"> train_loss, train_acc <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>evaluate(x_train, y_train, batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
- test_loss, test_acc <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>evaluate(x_test, y_test, batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
- print(<span style="color:#e6db74">&#39;Final train accuracy: </span><span style="color:#e6db74">{:.2f}</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">Final test accuracy: </span><span style="color:#e6db74">{:.2f}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(train_acc<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>, test_acc<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>))
- <span style="color:#ae81ff">25120</span><span style="color:#f92672">/</span><span style="color:#ae81ff">25120</span> [<span style="color:#f92672">==============================</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">186</span>s <span style="color:#ae81ff">7</span>ms<span style="color:#f92672">/</span>step <span style="color:#f92672">-</span> loss: <span style="color:#ae81ff">1.1413</span> <span style="color:#f92672">-</span> accuracy: <span style="color:#ae81ff">0.7055</span>
- <span style="color:#ae81ff">8613</span><span style="color:#f92672">/</span><span style="color:#ae81ff">8613</span> [<span style="color:#f92672">==============================</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">61</span>s <span style="color:#ae81ff">7</span>ms<span style="color:#f92672">/</span>step <span style="color:#f92672">-</span> loss: <span style="color:#ae81ff">1.4321</span> <span style="color:#f92672">-</span> accuracy: <span style="color:#ae81ff">0.6049</span>
- Final train accuracy: <span style="color:#ae81ff">70.55</span>	Final test accuracy: <span style="color:#ae81ff">60.49</span>
+<p>The final layer of the base pretrained ResNet50 was replaced with a 7 unit softmax activated layer. This model was trained for 20 epochs and it obtained an accuracy of 85.2%. To improve the performance on the FER dataset, freezing of some of the layers was done and retrained for 20 epochs. The accuracy increased from 85.2% to 86.3%.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"> loss, accuracy, precision, recall, auc <span style="color:#f92672">=</span> fer_model_2<span style="color:#f92672">.</span>evaluate(test_dataset)
+ print(<span style="color:#e6db74">&#39;Accuracy: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(accuracy))
+ <span style="color:#ae81ff">113</span><span style="color:#f92672">/</span><span style="color:#ae81ff">113</span> [<span style="color:#f92672">==============================</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">20</span>s <span style="color:#ae81ff">176</span>ms<span style="color:#f92672">/</span>step <span style="color:#f92672">-</span> loss: <span style="color:#ae81ff">1.6389</span> <span style="color:#f92672">-</span> accuracy: <span style="color:#ae81ff">0.8633</span> <span style="color:#f92672">-</span> precision: <span style="color:#ae81ff">0.6699</span> <span style="color:#f92672">-</span> recall: <span style="color:#ae81ff">0.0854</span> <span style="color:#f92672">-</span> auc: <span style="color:#ae81ff">0.7451</span>
+ Accuracy: <span style="color:#ae81ff">0.8633323907852173</span>
 </code></pre></div></li>
 </ol>
 <h2 id="tictactoe-ai">
