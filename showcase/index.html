@@ -11,8 +11,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta
   name="description"
-  content="Credit Card Risk Analyzer: #  In this project, I leveraged the power of Logistic Regression to predict if a customer&amp;rsquo;s credit card application will be approved. Most banks have systems like this, albeit much more complex, to make a prediction on the application&amp;rsquo;s approval. The risk associated with lending credit is immense and hence, banks rely heavily on such systems to mitigate it.
-  Exploratory Data Analysis: #  I looked through the dataset to understand the various kinds of features present and their data types and statistics."
+  content="Credit Card Risk Analyzer: # In this project, I leveraged the power of Logistic Regression to predict if a customer&amp;rsquo;s credit card application will be approved. Most banks have systems like this, albeit much more complex, to make a prediction on the application&amp;rsquo;s approval. The risk associated with lending credit is immense and hence, banks rely heavily on such systems to mitigate it.
+Exploratory Data Analysis: # I looked through the dataset to understand the various kinds of features present and their data types and statistics."
 />
 <meta
   name="keywords"
@@ -48,14 +48,14 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Projects:"/>
-<meta name="twitter:description" content="Credit Card Risk Analyzer: #  In this project, I leveraged the power of Logistic Regression to predict if a customer&rsquo;s credit card application will be approved. Most banks have systems like this, albeit much more complex, to make a prediction on the application&rsquo;s approval. The risk associated with lending credit is immense and hence, banks rely heavily on such systems to mitigate it.
-  Exploratory Data Analysis: #  I looked through the dataset to understand the various kinds of features present and their data types and statistics."/>
+<meta name="twitter:description" content="Credit Card Risk Analyzer: # In this project, I leveraged the power of Logistic Regression to predict if a customer&rsquo;s credit card application will be approved. Most banks have systems like this, albeit much more complex, to make a prediction on the application&rsquo;s approval. The risk associated with lending credit is immense and hence, banks rely heavily on such systems to mitigate it.
+Exploratory Data Analysis: # I looked through the dataset to understand the various kinds of features present and their data types and statistics."/>
 
 
 
 <meta property="og:title" content="Projects:" />
-<meta property="og:description" content="Credit Card Risk Analyzer: #  In this project, I leveraged the power of Logistic Regression to predict if a customer&rsquo;s credit card application will be approved. Most banks have systems like this, albeit much more complex, to make a prediction on the application&rsquo;s approval. The risk associated with lending credit is immense and hence, banks rely heavily on such systems to mitigate it.
-  Exploratory Data Analysis: #  I looked through the dataset to understand the various kinds of features present and their data types and statistics." />
+<meta property="og:description" content="Credit Card Risk Analyzer: # In this project, I leveraged the power of Logistic Regression to predict if a customer&rsquo;s credit card application will be approved. Most banks have systems like this, albeit much more complex, to make a prediction on the application&rsquo;s approval. The risk associated with lending credit is immense and hence, banks rely heavily on such systems to mitigate it.
+Exploratory Data Analysis: # I looked through the dataset to understand the various kinds of features present and their data types and statistics." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://adni03.github.io/Portfolio/showcase/" /><meta property="article:section" content="" />
 
@@ -197,43 +197,163 @@ There were columns with &lsquo;?&rsquo; in place of correct data. To address thi
   <a href="#data-pre-processing" class="h-anchor" aria-hidden="true">#</a>
 </h4>
 Firstly, the non-numeric data was encoded using LabelEncoding. Next, the data was scaled to bring it down to the [0-1] range. Normalizing the data improves model performance and it is computationally less expensive and since the data points are in the same range, each feature is weighted the same. Finally, the data was split into the training and testing dataset.
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"> <span style="color:#f92672">from</span> sklearn.preprocessing <span style="color:#f92672">import</span> MinMaxScaler
- scaler <span style="color:#f92672">=</span> MinMaxScaler(feature_range<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>))
- rescaledX_train <span style="color:#f92672">=</span> scaler<span style="color:#f92672">.</span>fit(X_train)<span style="color:#f92672">.</span>transform(X_train)
- rescaledX_test <span style="color:#f92672">=</span> scaler<span style="color:#f92672">.</span>fit(X_test)<span style="color:#f92672">.</span>transform(X_test)
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span> <span style="color:#f92672">from</span> sklearn.preprocessing <span style="color:#f92672">import</span> MinMaxScaler
+</span></span><span style="display:flex;"><span> scaler <span style="color:#f92672">=</span> MinMaxScaler(feature_range<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span> rescaledX_train <span style="color:#f92672">=</span> scaler<span style="color:#f92672">.</span>fit(X_train)<span style="color:#f92672">.</span>transform(X_train)
+</span></span><span style="display:flex;"><span> rescaledX_test <span style="color:#f92672">=</span> scaler<span style="color:#f92672">.</span>fit(X_test)<span style="color:#f92672">.</span>transform(X_test)
+</span></span></code></pre></div></li>
 <li>
 <h4 id="training-and-testing">
   Training and Testing:
   <a href="#training-and-testing" class="h-anchor" aria-hidden="true">#</a>
 </h4>
 Since, this is a binary classification problem, I chose to use the Logistic Regression algorithm for the prediction. The accuracy of the vanilla logistic regression model (without any tuning) was 83.7%.
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> confusion_matrix
-<span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> accuracy_score
-
-y_pred <span style="color:#f92672">=</span> logreg<span style="color:#f92672">.</span>predict(rescaledX_test)
-print(<span style="color:#e6db74">&#34;Accuracy of logistic regression classifier: &#34;</span>, accuracy_score(y_test, y_pred))
-confusion_matrix(y_test, y_pred)
-Accuracy of logistic regression classifier:  <span style="color:#ae81ff">0.8377192982456141</span>
-array([[<span style="color:#ae81ff">93</span>, <span style="color:#ae81ff">10</span>],
-    [<span style="color:#ae81ff">27</span>, <span style="color:#ae81ff">98</span>]])
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> confusion_matrix
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> accuracy_score
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>y_pred <span style="color:#f92672">=</span> logreg<span style="color:#f92672">.</span>predict(rescaledX_test)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;Accuracy of logistic regression classifier: &#34;</span>, accuracy_score(y_test, y_pred))
+</span></span><span style="display:flex;"><span>confusion_matrix(y_test, y_pred)
+</span></span><span style="display:flex;"><span>Accuracy of logistic regression classifier:  <span style="color:#ae81ff">0.8377192982456141</span>
+</span></span><span style="display:flex;"><span>array([[<span style="color:#ae81ff">93</span>, <span style="color:#ae81ff">10</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">27</span>, <span style="color:#ae81ff">98</span>]])
+</span></span></code></pre></div></li>
 <li>
 <h4 id="hyperparameter-tuning">
   Hyperparameter Tuning:
   <a href="#hyperparameter-tuning" class="h-anchor" aria-hidden="true">#</a>
 </h4>
 To improve the accuracy of the model, I used GridSearchCV with cross-validation to find the optimum parameters for the model. Cross-validation works by splitting the data into k folds and fitting the data to the model. (k-1) sets are used for training and the last set is used for validation.
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"> grid_model <span style="color:#f92672">=</span> GridSearchCV(logreg, param_grid<span style="color:#f92672">=</span>param_grid, cv<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
- rescaledX <span style="color:#f92672">=</span> scaler<span style="color:#f92672">.</span>fit(X_train)<span style="color:#f92672">.</span>transform(X_train)
- grid_model_result <span style="color:#f92672">=</span> grid_model<span style="color:#f92672">.</span>fit(rescaledX, y_train)
-
- <span style="color:#75715e"># Summarize results</span>
- best_score, best_params <span style="color:#f92672">=</span> grid_model_result<span style="color:#f92672">.</span>best_score_, grid_model_result<span style="color:#f92672">.</span>best_params_
- print(<span style="color:#e6db74">&#34;Best: </span><span style="color:#e6db74">%f</span><span style="color:#e6db74"> using </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (best_score, best_params))
- Best: <span style="color:#ae81ff">0.863651</span> using {<span style="color:#e6db74">&#39;max_iter&#39;</span>: <span style="color:#ae81ff">100</span>, <span style="color:#e6db74">&#39;tol&#39;</span>: <span style="color:#ae81ff">0.01</span>}
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span> grid_model <span style="color:#f92672">=</span> GridSearchCV(logreg, param_grid<span style="color:#f92672">=</span>param_grid, cv<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span> rescaledX <span style="color:#f92672">=</span> scaler<span style="color:#f92672">.</span>fit(X_train)<span style="color:#f92672">.</span>transform(X_train)
+</span></span><span style="display:flex;"><span> grid_model_result <span style="color:#f92672">=</span> grid_model<span style="color:#f92672">.</span>fit(rescaledX, y_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e"># Summarize results</span>
+</span></span><span style="display:flex;"><span> best_score, best_params <span style="color:#f92672">=</span> grid_model_result<span style="color:#f92672">.</span>best_score_, grid_model_result<span style="color:#f92672">.</span>best_params_
+</span></span><span style="display:flex;"><span> print(<span style="color:#e6db74">&#34;Best: </span><span style="color:#e6db74">%f</span><span style="color:#e6db74"> using </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (best_score, best_params))
+</span></span><span style="display:flex;"><span> Best: <span style="color:#ae81ff">0.863651</span> using {<span style="color:#e6db74">&#39;max_iter&#39;</span>: <span style="color:#ae81ff">100</span>, <span style="color:#e6db74">&#39;tol&#39;</span>: <span style="color:#ae81ff">0.01</span>}
+</span></span></code></pre></div></li>
 </ol>
+<hr>
+<h2 id="covid-19-detection-using-cnns">
+  COVID-19 Detection using CNNs:
+  <a href="#covid-19-detection-using-cnns" class="h-anchor" aria-hidden="true">#</a>
+</h2>
+<p><img src="https://github.com/adni03/COVID-19-detection-CNN/blob/main/xrays.jpg?raw=true" alt=""></p>
+<p>COVID-19 is an infection that is caused by the SARS-Cov2 virus. There are multiple variants of this virus, as the world has come to know it, but one particularly dangerous one is the Delta variant, which is known to cause damage to the lungs of its host. This infection can be spotted via a chest X-RAY scan. This scan is the basis for this project. Using a Convolutional Neural Network, these scans are analyzed for signs of COVID-19 infection. The tricky bit is differentiating between scans of patients with viral pneumonia and COVID-19. The latter stages of the COVID infection is brought on by a pneumonia like infection in the lungs. This project was implemented in the PyTorch framework.</p>
+<ol>
+<li>
+<h4 id="the-dataset">
+  The Dataset:
+  <a href="#the-dataset" class="h-anchor" aria-hidden="true">#</a>
+</h4>
+<p>The COVID-19 Radiograpy Database is a collection of chest X-RAYS of patients with the following conditions:</p>
+<ul>
+<li>COVID-19 infection: 3616 images</li>
+<li>Normal lungs: 10,192 images</li>
+<li>Non-COVID lung infections: 6012 images</li>
+<li>Viral pneumonia infection: 1345 images
+This database was created by researchers from Qatar Univeristy and Univeristy of Dhaka in collaboration with medical professionals in their countries as well as Malaysia and Pakistan.</li>
+</ul>
+</li>
+<li>
+<h4 id="custom-dataset">
+  Custom Dataset:
+  <a href="#custom-dataset" class="h-anchor" aria-hidden="true">#</a>
+</h4>
+<p>I created a custom dataset class that is helpful while training and testing the model. This class inherits from <code>torch.utils.data.Dataset</code> and implements the <code>__getitem()__</code> method.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ChestXRayDataset</span>(torch<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>Dataset):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, image_dirs, transform):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># transform obj is used to do data augmentation</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_images</span>(class_name):
+</span></span><span style="display:flex;"><span>            images <span style="color:#f92672">=</span> [x <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> os<span style="color:#f92672">.</span>listdir(image_dirs[class_name]) <span style="color:#66d9ef">if</span> x[<span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>:]<span style="color:#f92672">.</span>lower()<span style="color:#f92672">.</span>endswith(<span style="color:#e6db74">&#39;png&#39;</span>)]
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Found </span><span style="color:#e6db74">{</span>len(images)<span style="color:#e6db74">}</span><span style="color:#e6db74"> </span><span style="color:#e6db74">{</span>class_name<span style="color:#e6db74">}</span><span style="color:#e6db74"> examples&#39;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> images
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>images <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>class_names <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;normal&#39;</span>, <span style="color:#e6db74">&#39;viral&#39;</span>, <span style="color:#e6db74">&#39;covid&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>class_names:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>images[c] <span style="color:#f92672">=</span> get_images(c)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>image_dirs <span style="color:#f92672">=</span> image_dirs
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>transform <span style="color:#f92672">=</span> transform
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __len__(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> sum([len(self<span style="color:#f92672">.</span>images[c]) <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>class_names])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __getitem__(self, index):
+</span></span><span style="display:flex;"><span>        class_name <span style="color:#f92672">=</span> random<span style="color:#f92672">.</span>choice(self<span style="color:#f92672">.</span>class_names)
+</span></span><span style="display:flex;"><span>        index <span style="color:#f92672">=</span> index <span style="color:#f92672">%</span> len(self<span style="color:#f92672">.</span>images[class_name])
+</span></span><span style="display:flex;"><span>        image_name <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>images[class_name][index]
+</span></span><span style="display:flex;"><span>        image_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(self<span style="color:#f92672">.</span>image_dirs[class_name], image_name)
+</span></span><span style="display:flex;"><span>        image <span style="color:#f92672">=</span> Image<span style="color:#f92672">.</span>open(image_path)<span style="color:#f92672">.</span>convert(<span style="color:#e6db74">&#39;RGB&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>transform(image), self<span style="color:#f92672">.</span>class_names<span style="color:#f92672">.</span>index(class_name)
+</span></span></code></pre></div></li>
+<li>
+<h4 id="image-tranforms">
+  Image Tranforms:
+  <a href="#image-tranforms" class="h-anchor" aria-hidden="true">#</a>
+</h4>
+<p>A few preprocessing steps were added to the pipeline before the model could be trained. For the training images:</p>
+<ul>
+<li>Resizing: match input dimensions for pretrained ResNet18</li>
+<li>Augmentation: <code>RandomHorizontalFlip</code></li>
+<li>Normalization</li>
+</ul>
+<p>And for the test images:</p>
+<ul>
+<li>Resizing</li>
+<li>Normalization</li>
+</ul>
+<p>Normalization was done separately to avoid <code>Data Leakage</code>.</p>
+</li>
+<li>
+<h4 id="the-model">
+  The Model:
+  <a href="#the-model" class="h-anchor" aria-hidden="true">#</a>
+</h4>
+<p>The Convolutional Neural Network used for this project is a relatively light-weight residual network, ResNet18. This model was chosen for ease of transfer learning. The model was pretrained on the ImageNet dataset, which consists of images from over 1000 classes.
+<img src="https://github.com/adni03/COVID-19-detection-CNN/blob/main/resnet18.png?raw=true" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  resnet18 <span style="color:#f92672">=</span> torchvision<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>resnet18(pretrained<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span></code></pre></div></li>
+<li>
+<h4 id="training-and-performance">
+  Training and Performance:
+  <a href="#training-and-performance" class="h-anchor" aria-hidden="true">#</a>
+</h4>
+<p>The model was trained for a few epochs to fine-tune the weights to improve the prediction accuracy. The performance criteria was set to 95% accuracy and the model was able to do so in under 2 epochs. The training loop is highlighted below, for full code, please visit my GitHub repository for this project.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train</span>(epochs):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> e <span style="color:#f92672">in</span> range(epochs):
+</span></span><span style="display:flex;"><span>        train_loss <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        resnet18<span style="color:#f92672">.</span>train()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># batch of images</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> train_step, (images, labels) <span style="color:#f92672">in</span> enumerate(dl_train):
+</span></span><span style="display:flex;"><span>            optimizer<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>            outputs <span style="color:#f92672">=</span> resnet18(images)
+</span></span><span style="display:flex;"><span>            loss <span style="color:#f92672">=</span> loss_fn(outputs, labels)
+</span></span><span style="display:flex;"><span>            loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>            optimizer<span style="color:#f92672">.</span>step()
+</span></span><span style="display:flex;"><span>            train_loss <span style="color:#f92672">+=</span> loss<span style="color:#f92672">.</span>item()
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> train_step <span style="color:#f92672">%</span> <span style="color:#ae81ff">20</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e"># perform validation calculations</span>
+</span></span><span style="display:flex;"><span>                resnet18<span style="color:#f92672">.</span>train()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> acc <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0.95</span>:
+</span></span><span style="display:flex;"><span>                    print(<span style="color:#e6db74">&#39;Performance condition satisfied&#39;</span>)
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>        train_loss <span style="color:#f92672">/=</span> (train_step <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Training loss: </span><span style="color:#e6db74">{</span>train_loss<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span></code></pre></div></li>
+</ol>
+<hr>
+<h2 id="neural-style-transfer">
+  Neural Style Transfer:
+  <a href="#neural-style-transfer" class="h-anchor" aria-hidden="true">#</a>
+</h2>
+<hr>
 <h2 id="facial-emotion-recognition">
   Facial Emotion Recognition:
   <a href="#facial-emotion-recognition" class="h-anchor" aria-hidden="true">#</a>
@@ -242,62 +362,63 @@ To improve the accuracy of the model, I used GridSearchCV with cross-validation 
 <p>The goal of this project was to classify images of human faces into one of seven basic emotions. To do so, I used Convolutional Neural Networks as the advantage it had over its precedessors is that it can detect important features without human intervention. CNNs are computationally efficient as well due to the special convolution and pooling operations.</p>
 <ol>
 <li>
-<h4 id="the-dataset">
+<h4 id="the-dataset-1">
   The Dataset:
-  <a href="#the-dataset" class="h-anchor" aria-hidden="true">#</a>
+  <a href="#the-dataset-1" class="h-anchor" aria-hidden="true">#</a>
 </h4>
 <p>The FER-2013 dataset consists of 35,887 images, each of size 48x48 pixels. The data was split into 28,709 images for training and 7,178 images for testing.</p>
 </li>
 <li>
-<h4 id="the-model">
+<h4 id="the-model-1">
   The Model:
-  <a href="#the-model" class="h-anchor" aria-hidden="true">#</a>
+  <a href="#the-model-1" class="h-anchor" aria-hidden="true">#</a>
 </h4>
 <p>A ResNet50 architecture was used as the Convolutional Neural Network which was pretrained on the ImageNet dataset. This dataset has 1000 classes but for the case of facial emotion recognition, there are only 7. Hence, to fine tune the network, the shallower layers were frozen and the model was trained using the training set. The building of the fine-tuned network is shown below:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fer_model_fine_tune</span>(base_model, input_shape):
- fine_tune_start <span style="color:#f92672">=</span> <span style="color:#ae81ff">155</span>
-
- <span style="color:#75715e"># Freezing all layers before the fine_tune_start layer</span>
- <span style="color:#66d9ef">for</span> layer <span style="color:#f92672">in</span> base_model<span style="color:#f92672">.</span>layers[: fine_tune_start]:
-     layer<span style="color:#f92672">.</span>trainable <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
-
- <span style="color:#75715e"># declaring the input</span>
- inputs <span style="color:#f92672">=</span> Input(shape<span style="color:#f92672">=</span>input_shape)
-
- <span style="color:#75715e"># obtaining image embeddings from the second last layer</span>
- x <span style="color:#f92672">=</span> base_model(inputs, training<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
-
- <span style="color:#75715e"># adding global avg pooling</span>
- x <span style="color:#f92672">=</span> GlobalAvgPool2D()(x)
-
- <span style="color:#75715e"># including dropout with prob=0.2</span>
- x <span style="color:#f92672">=</span> Dropout(rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>)(x)
-
- <span style="color:#75715e"># adding a flatten layer</span>
- x <span style="color:#f92672">=</span> Flatten()(x)
-
- <span style="color:#75715e"># adding the prediction layer with 7 units, softmax activation</span>
- prediction_layer <span style="color:#f92672">=</span> Dense(units<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)(x)
-
- <span style="color:#75715e"># outputs</span>
- outputs <span style="color:#f92672">=</span> prediction_layer
-
- model <span style="color:#f92672">=</span> Model(inputs, outputs)
-
- <span style="color:#66d9ef">return</span> model
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fer_model_fine_tune</span>(base_model, input_shape):
+</span></span><span style="display:flex;"><span> fine_tune_start <span style="color:#f92672">=</span> <span style="color:#ae81ff">155</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e"># Freezing all layers before the fine_tune_start layer</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">for</span> layer <span style="color:#f92672">in</span> base_model<span style="color:#f92672">.</span>layers[: fine_tune_start]:
+</span></span><span style="display:flex;"><span>     layer<span style="color:#f92672">.</span>trainable <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e"># declaring the input</span>
+</span></span><span style="display:flex;"><span> inputs <span style="color:#f92672">=</span> Input(shape<span style="color:#f92672">=</span>input_shape)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e"># obtaining image embeddings from the second last layer</span>
+</span></span><span style="display:flex;"><span> x <span style="color:#f92672">=</span> base_model(inputs, training<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e"># adding global avg pooling</span>
+</span></span><span style="display:flex;"><span> x <span style="color:#f92672">=</span> GlobalAvgPool2D()(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e"># including dropout with prob=0.2</span>
+</span></span><span style="display:flex;"><span> x <span style="color:#f92672">=</span> Dropout(rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>)(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e"># adding a flatten layer</span>
+</span></span><span style="display:flex;"><span> x <span style="color:#f92672">=</span> Flatten()(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e"># adding the prediction layer with 7 units, softmax activation</span>
+</span></span><span style="display:flex;"><span> prediction_layer <span style="color:#f92672">=</span> Dense(units<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e"># outputs</span>
+</span></span><span style="display:flex;"><span> outputs <span style="color:#f92672">=</span> prediction_layer
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> model <span style="color:#f92672">=</span> Model(inputs, outputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">return</span> model
+</span></span></code></pre></div></li>
 <li>
 <h4 id="training-and-testing-1">
   Training and Testing:
   <a href="#training-and-testing-1" class="h-anchor" aria-hidden="true">#</a>
 </h4>
 <p>The final layer of the base pretrained ResNet50 was replaced with a 7 unit softmax activated layer. This model was trained for 20 epochs and it obtained an accuracy of 85.2%. To improve the performance on the FER dataset, freezing of some of the layers was done and retrained for 20 epochs. The accuracy increased from 85.2% to 86.3%.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"> loss, accuracy, precision, recall, auc <span style="color:#f92672">=</span> fer_model_2<span style="color:#f92672">.</span>evaluate(test_dataset)
- print(<span style="color:#e6db74">&#39;Accuracy: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(accuracy))
- <span style="color:#ae81ff">113</span><span style="color:#f92672">/</span><span style="color:#ae81ff">113</span> [<span style="color:#f92672">==============================</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">20</span>s <span style="color:#ae81ff">176</span>ms<span style="color:#f92672">/</span>step <span style="color:#f92672">-</span> loss: <span style="color:#ae81ff">1.6389</span> <span style="color:#f92672">-</span> accuracy: <span style="color:#ae81ff">0.8633</span> <span style="color:#f92672">-</span> precision: <span style="color:#ae81ff">0.6699</span> <span style="color:#f92672">-</span> recall: <span style="color:#ae81ff">0.0854</span> <span style="color:#f92672">-</span> auc: <span style="color:#ae81ff">0.7451</span>
- Accuracy: <span style="color:#ae81ff">0.8633323907852173</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span> loss, accuracy, precision, recall, auc <span style="color:#f92672">=</span> fer_model_2<span style="color:#f92672">.</span>evaluate(test_dataset)
+</span></span><span style="display:flex;"><span> print(<span style="color:#e6db74">&#39;Accuracy: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(accuracy))
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">113</span><span style="color:#f92672">/</span><span style="color:#ae81ff">113</span> [<span style="color:#f92672">==============================</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">20</span>s <span style="color:#ae81ff">176</span>ms<span style="color:#f92672">/</span>step <span style="color:#f92672">-</span> loss: <span style="color:#ae81ff">1.6389</span> <span style="color:#f92672">-</span> accuracy: <span style="color:#ae81ff">0.8633</span> <span style="color:#f92672">-</span> precision: <span style="color:#ae81ff">0.6699</span> <span style="color:#f92672">-</span> recall: <span style="color:#ae81ff">0.0854</span> <span style="color:#f92672">-</span> auc: <span style="color:#ae81ff">0.7451</span>
+</span></span><span style="display:flex;"><span> Accuracy: <span style="color:#ae81ff">0.8633323907852173</span>
+</span></span></code></pre></div></li>
 </ol>
+<hr>
 <h2 id="tictactoe-ai">
   TicTacToe AI:
   <a href="#tictactoe-ai" class="h-anchor" aria-hidden="true">#</a>
@@ -325,131 +446,132 @@ The target function (V) was chosen to be a linear function that maps a given boa
 </code></pre></li>
 </ul>
 <p>Here is a sample game I played with the machine:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  print(<span style="color:#e6db74">&#34;Let the game begin : &#34;</span>)
-  play(size)
-  Let the game begin : 
-  Computer<span style="color:#e6db74">&#39;s turn : </span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  Human<span style="color:#e6db74">&#39;s move : </span>
-  Enter x coordinate : <span style="color:#ae81ff">0</span>
-  Enter y coordinate : <span style="color:#ae81ff">0</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  Computer<span style="color:#e6db74">&#39;s turn : </span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  Human<span style="color:#e6db74">&#39;s move : </span>
-  Enter x coordinate : <span style="color:#ae81ff">3</span>
-  Enter y coordinate : <span style="color:#ae81ff">1</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  Computer<span style="color:#e6db74">&#39;s turn : </span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  Human<span style="color:#e6db74">&#39;s move : </span>
-  Enter x coordinate : <span style="color:#ae81ff">3</span>
-  Enter y coordinate : <span style="color:#ae81ff">2</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  Computer<span style="color:#e6db74">&#39;s turn : </span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  Human<span style="color:#e6db74">&#39;s move : </span>
-  Enter x coordinate : <span style="color:#ae81ff">3</span>
-  Enter y coordinate : <span style="color:#ae81ff">3</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  Computer<span style="color:#e6db74">&#39;s turn : </span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  Human<span style="color:#e6db74">&#39;s move : </span>
-  Enter x coordinate : <span style="color:#ae81ff">2</span>
-  Enter y coordinate : <span style="color:#ae81ff">1</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  Computer<span style="color:#e6db74">&#39;s turn : </span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">|</span>
-  <span style="color:#f92672">--------------------</span>
-  Computer Wins<span style="color:#960050;background-color:#1e0010">!</span>
-</code></pre></div><h2 id="handwritten-digits-and-characters-classification">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  print(<span style="color:#e6db74">&#34;Let the game begin : &#34;</span>)
+</span></span><span style="display:flex;"><span>  play(size)
+</span></span><span style="display:flex;"><span>  Let the game begin : 
+</span></span><span style="display:flex;"><span>  Computer<span style="color:#e6db74">&#39;s turn : </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  Human<span style="color:#e6db74">&#39;s move : </span>
+</span></span><span style="display:flex;"><span>  Enter x coordinate : <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  Enter y coordinate : <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  Computer<span style="color:#e6db74">&#39;s turn : </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  Human<span style="color:#e6db74">&#39;s move : </span>
+</span></span><span style="display:flex;"><span>  Enter x coordinate : <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>  Enter y coordinate : <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  Computer<span style="color:#e6db74">&#39;s turn : </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  Human<span style="color:#e6db74">&#39;s move : </span>
+</span></span><span style="display:flex;"><span>  Enter x coordinate : <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>  Enter y coordinate : <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  Computer<span style="color:#e6db74">&#39;s turn : </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  Human<span style="color:#e6db74">&#39;s move : </span>
+</span></span><span style="display:flex;"><span>  Enter x coordinate : <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>  Enter y coordinate : <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  Computer<span style="color:#e6db74">&#39;s turn : </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  Human<span style="color:#e6db74">&#39;s move : </span>
+</span></span><span style="display:flex;"><span>  Enter x coordinate : <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>  Enter y coordinate : <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  Computer<span style="color:#e6db74">&#39;s turn : </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">||</span> X <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">||</span> <span style="color:#f92672">-</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">|</span> X <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">||</span> O <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--------------------</span>
+</span></span><span style="display:flex;"><span>  Computer Wins<span style="color:#960050;background-color:#1e0010">!</span>
+</span></span></code></pre></div><hr>
+<h2 id="handwritten-digits-and-characters-classification">
   Handwritten Digits and Characters Classification:
   <a href="#handwritten-digits-and-characters-classification" class="h-anchor" aria-hidden="true">#</a>
 </h2>
@@ -478,16 +600,16 @@ This is the handwritten characters dataset that contains images of both lower an
 </li>
 </ol>
 <p>The images in these datasets were visualized using <code>matplotlib</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  print(<span style="color:#e6db74">&#34;Sample of images from the MNIST Dataset : &#34;</span>)
-  plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">8</span>))
-  <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">16</span>):
-      plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>, i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
-      plt<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#39;off&#39;</span>)
-      r <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(x_train<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>])   <span style="color:#75715e">## PICK A RANDON IMAGE TO SHOW</span>
-      plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;True Label: &#39;</span><span style="color:#f92672">+</span> str(y_train[r])) <span style="color:#75715e">## PRINT LABEL</span>
-      plt<span style="color:#f92672">.</span>imshow(x_train[r]<span style="color:#f92672">.</span>reshape(<span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>))     <span style="color:#75715e">## PRINT IMAGE</span>
-  plt<span style="color:#f92672">.</span>show()
-</code></pre></div><ol start="2">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  print(<span style="color:#e6db74">&#34;Sample of images from the MNIST Dataset : &#34;</span>)
+</span></span><span style="display:flex;"><span>  plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">8</span>))
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">16</span>):
+</span></span><span style="display:flex;"><span>      plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>, i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>      plt<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#39;off&#39;</span>)
+</span></span><span style="display:flex;"><span>      r <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(x_train<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>])   <span style="color:#75715e">## PICK A RANDON IMAGE TO SHOW</span>
+</span></span><span style="display:flex;"><span>      plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;True Label: &#39;</span><span style="color:#f92672">+</span> str(y_train[r])) <span style="color:#75715e">## PRINT LABEL</span>
+</span></span><span style="display:flex;"><span>      plt<span style="color:#f92672">.</span>imshow(x_train[r]<span style="color:#f92672">.</span>reshape(<span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>))     <span style="color:#75715e">## PRINT IMAGE</span>
+</span></span><span style="display:flex;"><span>  plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><ol start="2">
 <li>
 <h4 id="the-n-layer-feed-forward-neural-network">
   The N-layer Feed Forward Neural Network:
@@ -499,95 +621,95 @@ This is the handwritten characters dataset that contains images of both lower an
   Initializing Parameters for all layers:
   <a href="#initializing-parameters-for-all-layers" class="h-anchor" aria-hidden="true">#</a>
 </h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  <span style="color:#75715e"># dim( W[l] ) = ( n[l], n[l-1] )</span>
-  <span style="color:#75715e"># dim( b[l] ) = ( 1, n[l] )</span>
-  <span style="color:#75715e"># where, </span>
-  <span style="color:#75715e">#   l = current layer</span>
-  <span style="color:#75715e">#   W[l] = weights of current layer</span>
-  <span style="color:#75715e">#   b[l] = bias for the current layer</span>
-  <span style="color:#75715e">#   n[l] = number of nodes in current layer</span>
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize_parameters</span>(layer_dims):
-  parameters <span style="color:#f92672">=</span> {}
-  L <span style="color:#f92672">=</span> len(layer_dims)
-
-  <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>, L):
-      parameters[<span style="color:#e6db74">&#39;W&#39;</span> <span style="color:#f92672">+</span> str(i)] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(layer_dims[i], layer_dims[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])<span style="color:#f92672">*</span><span style="color:#ae81ff">0.01</span>
-      parameters[<span style="color:#e6db74">&#39;b&#39;</span> <span style="color:#f92672">+</span> str(i)] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((<span style="color:#ae81ff">1</span>, layer_dims[i])) <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.01</span>
-
-  <span style="color:#66d9ef">return</span> parameters
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  <span style="color:#75715e"># dim( W[l] ) = ( n[l], n[l-1] )</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># dim( b[l] ) = ( 1, n[l] )</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># where, </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#   l = current layer</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#   W[l] = weights of current layer</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#   b[l] = bias for the current layer</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#   n[l] = number of nodes in current layer</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize_parameters</span>(layer_dims):
+</span></span><span style="display:flex;"><span>  parameters <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>  L <span style="color:#f92672">=</span> len(layer_dims)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>, L):
+</span></span><span style="display:flex;"><span>      parameters[<span style="color:#e6db74">&#39;W&#39;</span> <span style="color:#f92672">+</span> str(i)] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(layer_dims[i], layer_dims[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])<span style="color:#f92672">*</span><span style="color:#ae81ff">0.01</span>
+</span></span><span style="display:flex;"><span>      parameters[<span style="color:#e6db74">&#39;b&#39;</span> <span style="color:#f92672">+</span> str(i)] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((<span style="color:#ae81ff">1</span>, layer_dims[i])) <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.01</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> parameters
+</span></span></code></pre></div></li>
 <li>
 <h4 id="forward-and-backward-propagation">
   Forward and backward propagation:
   <a href="#forward-and-backward-propagation" class="h-anchor" aria-hidden="true">#</a>
 </h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  <span style="color:#75715e"># Forward propagation equations:</span>
-
-  <span style="color:#75715e"># Z[l] = W[l].X + b[l] </span>
-  <span style="color:#75715e"># A[l] = g( Z[l] )</span>
-  <span style="color:#75715e"># Where,</span>
-  <span style="color:#75715e">#     Z = weighted sum of input and bias</span>
-  <span style="color:#75715e">#     A = activations of particular layer</span>
-  <span style="color:#75715e">#     l = layer</span>
-
-  <span style="color:#75715e"># Backward propagation equations:</span>
-
-  <span style="color:#75715e"># Err(j)(output layer) = O(j)(1 - O(j))(T(j) - O(j))</span>
-  <span style="color:#75715e"># Err(j)(hidden layer) = O(j)(1 - O(j))(SUM(Err(k)W(j,k)</span>
-  <span style="color:#75715e"># del(W(i,j)) = (l)Err(j)O(i)</span>
-  <span style="color:#75715e"># del(b(j)) = (l)Err(j)</span>
-  <span style="color:#75715e"># Where,</span>
-  <span style="color:#75715e">#       O: Output of a node</span>
-  <span style="color:#75715e">#       W: weight</span>
-  <span style="color:#75715e">#       b: bias</span>
-  <span style="color:#75715e">#       i, j, k: nodes</span>
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sigmoid</span>(X):
-      <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>exp(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">*</span>X))
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward_step</span>(A_prev, W, b):
-      <span style="color:#66d9ef">return</span> sigmoid(np<span style="color:#f92672">.</span>dot(A_prev, W<span style="color:#f92672">.</span>T) <span style="color:#f92672">+</span> b)
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">computation_n</span>(X, y, parameters, eta, num_iters):
-      hidden_output <span style="color:#f92672">=</span> []
-      hidden_error <span style="color:#f92672">=</span> []
-      m <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]
-      L <span style="color:#f92672">=</span> (len(parameters)<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>      <span style="color:#75715e"># number of layers</span>
-
-      <span style="color:#75715e"># iterating for given number of iterations</span>
-      <span style="color:#66d9ef">for</span> itr <span style="color:#f92672">in</span> range(num_iters):
-          <span style="color:#75715e"># for each training example</span>
-          <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(m):
-              <span style="color:#75715e"># forward propagation for n layers</span>
-              hidden_output<span style="color:#f92672">.</span>append(X[i])
-              A_prev <span style="color:#f92672">=</span> X[i]
-              <span style="color:#66d9ef">for</span> l <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>, L):
-                  A_prev <span style="color:#f92672">=</span> forward_step(A_prev, parameters[<span style="color:#e6db74">&#39;W&#39;</span> <span style="color:#f92672">+</span> str(l)], parameters[<span style="color:#e6db74">&#39;b&#39;</span> <span style="color:#f92672">+</span> str(l)])
-                  hidden_output<span style="color:#f92672">.</span>append(A_prev)
-
-              <span style="color:#75715e"># propagating the error backwards</span>
-              <span style="color:#75715e"># print(&#39;hidden_output[-1].shape: {}; y[i].shape: {}&#39;.format(hidden_output[-1].shape, y[i].shape))</span>
-              dOutput <span style="color:#f92672">=</span> hidden_output[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">*</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> hidden_output[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])<span style="color:#f92672">*</span>(y[i] <span style="color:#f92672">-</span> hidden_output[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
-              hidden_error<span style="color:#f92672">.</span>append(dOutput)
-              k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-              <span style="color:#66d9ef">for</span> l <span style="color:#f92672">in</span> reversed(range(<span style="color:#ae81ff">1</span>, L<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)):
-                  error <span style="color:#f92672">=</span> hidden_output[l]<span style="color:#f92672">*</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> hidden_output[l])<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>dot(hidden_error[k], parameters[<span style="color:#e6db74">&#39;W&#39;</span> <span style="color:#f92672">+</span> str(l<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)])
-                  hidden_error<span style="color:#f92672">.</span>append(error)
-                  k <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
-
-              <span style="color:#75715e"># parameter changes</span>
-              k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-              <span style="color:#66d9ef">for</span> l <span style="color:#f92672">in</span> reversed(range(<span style="color:#ae81ff">1</span>, L)):
-                  parameters[<span style="color:#e6db74">&#39;W&#39;</span> <span style="color:#f92672">+</span> str(l)] <span style="color:#f92672">+=</span> eta<span style="color:#f92672">*</span>hidden_error[k]<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)<span style="color:#f92672">*</span>hidden_output[l<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
-                  parameters[<span style="color:#e6db74">&#39;b&#39;</span> <span style="color:#f92672">+</span> str(l)] <span style="color:#f92672">+=</span> eta<span style="color:#f92672">*</span>hidden_error[k]
-                  k <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
-
-              hidden_output<span style="color:#f92672">.</span>clear()
-              hidden_error<span style="color:#f92672">.</span>clear()
-
-      <span style="color:#66d9ef">return</span> parameters
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  <span style="color:#75715e"># Forward propagation equations:</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Z[l] = W[l].X + b[l] </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># A[l] = g( Z[l] )</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Where,</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#     Z = weighted sum of input and bias</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#     A = activations of particular layer</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#     l = layer</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Backward propagation equations:</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Err(j)(output layer) = O(j)(1 - O(j))(T(j) - O(j))</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Err(j)(hidden layer) = O(j)(1 - O(j))(SUM(Err(k)W(j,k)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># del(W(i,j)) = (l)Err(j)O(i)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># del(b(j)) = (l)Err(j)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Where,</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#       O: Output of a node</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#       W: weight</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#       b: bias</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#       i, j, k: nodes</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sigmoid</span>(X):
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>exp(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">*</span>X))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward_step</span>(A_prev, W, b):
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> sigmoid(np<span style="color:#f92672">.</span>dot(A_prev, W<span style="color:#f92672">.</span>T) <span style="color:#f92672">+</span> b)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">computation_n</span>(X, y, parameters, eta, num_iters):
+</span></span><span style="display:flex;"><span>      hidden_output <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>      hidden_error <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>      m <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>      L <span style="color:#f92672">=</span> (len(parameters)<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>      <span style="color:#75715e"># number of layers</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># iterating for given number of iterations</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">for</span> itr <span style="color:#f92672">in</span> range(num_iters):
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># for each training example</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(m):
+</span></span><span style="display:flex;"><span>              <span style="color:#75715e"># forward propagation for n layers</span>
+</span></span><span style="display:flex;"><span>              hidden_output<span style="color:#f92672">.</span>append(X[i])
+</span></span><span style="display:flex;"><span>              A_prev <span style="color:#f92672">=</span> X[i]
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">for</span> l <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>, L):
+</span></span><span style="display:flex;"><span>                  A_prev <span style="color:#f92672">=</span> forward_step(A_prev, parameters[<span style="color:#e6db74">&#39;W&#39;</span> <span style="color:#f92672">+</span> str(l)], parameters[<span style="color:#e6db74">&#39;b&#39;</span> <span style="color:#f92672">+</span> str(l)])
+</span></span><span style="display:flex;"><span>                  hidden_output<span style="color:#f92672">.</span>append(A_prev)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>              <span style="color:#75715e"># propagating the error backwards</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#75715e"># print(&#39;hidden_output[-1].shape: {}; y[i].shape: {}&#39;.format(hidden_output[-1].shape, y[i].shape))</span>
+</span></span><span style="display:flex;"><span>              dOutput <span style="color:#f92672">=</span> hidden_output[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">*</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> hidden_output[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])<span style="color:#f92672">*</span>(y[i] <span style="color:#f92672">-</span> hidden_output[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>              hidden_error<span style="color:#f92672">.</span>append(dOutput)
+</span></span><span style="display:flex;"><span>              k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">for</span> l <span style="color:#f92672">in</span> reversed(range(<span style="color:#ae81ff">1</span>, L<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)):
+</span></span><span style="display:flex;"><span>                  error <span style="color:#f92672">=</span> hidden_output[l]<span style="color:#f92672">*</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> hidden_output[l])<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>dot(hidden_error[k], parameters[<span style="color:#e6db74">&#39;W&#39;</span> <span style="color:#f92672">+</span> str(l<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)])
+</span></span><span style="display:flex;"><span>                  hidden_error<span style="color:#f92672">.</span>append(error)
+</span></span><span style="display:flex;"><span>                  k <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>              <span style="color:#75715e"># parameter changes</span>
+</span></span><span style="display:flex;"><span>              k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">for</span> l <span style="color:#f92672">in</span> reversed(range(<span style="color:#ae81ff">1</span>, L)):
+</span></span><span style="display:flex;"><span>                  parameters[<span style="color:#e6db74">&#39;W&#39;</span> <span style="color:#f92672">+</span> str(l)] <span style="color:#f92672">+=</span> eta<span style="color:#f92672">*</span>hidden_error[k]<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)<span style="color:#f92672">*</span>hidden_output[l<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>                  parameters[<span style="color:#e6db74">&#39;b&#39;</span> <span style="color:#f92672">+</span> str(l)] <span style="color:#f92672">+=</span> eta<span style="color:#f92672">*</span>hidden_error[k]
+</span></span><span style="display:flex;"><span>                  k <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>              hidden_output<span style="color:#f92672">.</span>clear()
+</span></span><span style="display:flex;"><span>              hidden_error<span style="color:#f92672">.</span>clear()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> parameters
+</span></span></code></pre></div></li>
 </ol>
 </li>
 <li>
@@ -596,38 +718,38 @@ This is the handwritten characters dataset that contains images of both lower an
   <a href="#training-and-testing-2" class="h-anchor" aria-hidden="true">#</a>
 </h4>
 The MNIST and EMNIST datasets were loaded and the labels were One-Hot encoded. The parameters for the models were initialzed and the model was trained on the training split obtained by using the <code>train_test_split</code> method imported from <code>sklearn.model_selection</code>. Furthermore, the pixel values were normalized to the range [0-1] for more efficient computation. The results are shown below:
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  <span style="color:#75715e"># Handwritten digits classification</span>
-  parameters <span style="color:#f92672">=</span> initialize_parameters([<span style="color:#ae81ff">784</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">10</span>])
-  print(<span style="color:#e6db74">&#34;Length of parameters dictionary : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(len(parameters)))
-  Length of parameters dictionary : <span style="color:#ae81ff">6</span>
-
-  print(<span style="color:#e6db74">&#34;Training model...&#34;</span>)
-  parameters <span style="color:#f92672">=</span> train(x_train, y_train, parameters, <span style="color:#ae81ff">0.01</span>, <span style="color:#ae81ff">20</span>)
-  Training model<span style="color:#f92672">...</span>
-
-  print(<span style="color:#e6db74">&#34;Testing model...&#34;</span>)
-  print(<span style="color:#e6db74">&#39;Training error : &#39;</span>, end<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>)
-  test(x_train, y_train, parameters)
-  print(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Testing error : &#39;</span>, end<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>)
-  test(x_test, y_test, parameters)
-  Testing model<span style="color:#f92672">...</span>
-  Training error : Accuracy : <span style="color:#ae81ff">98.791</span> <span style="color:#f92672">%</span>
-  Testing error : Accuracy : <span style="color:#ae81ff">98.772</span> <span style="color:#f92672">%</span>
-
-  <span style="color:#75715e"># Handwritten characters classification</span>
-  parameters <span style="color:#f92672">=</span> initialize_parameters([<span style="color:#ae81ff">784</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">27</span>])
-  print(<span style="color:#e6db74">&#34;Length of parameters dictionary : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(len(parameters)))
-  Length of parameters dictionary : <span style="color:#ae81ff">6</span>
-
-  print(<span style="color:#e6db74">&#34;Training model...&#34;</span>)
-  parameters <span style="color:#f92672">=</span> train(X_train, y_train, parameters, <span style="color:#ae81ff">0.01</span>, <span style="color:#ae81ff">20</span>)
-  Training model<span style="color:#f92672">...</span>
-
-  print(<span style="color:#e6db74">&#34;Testing model...&#34;</span>)
-  test(X_test, y_test, parameters)
-  Testing model<span style="color:#f92672">...</span>
-  Accuracy : <span style="color:#ae81ff">96.29629629629629</span> <span style="color:#f92672">%</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  <span style="color:#75715e"># Handwritten digits classification</span>
+</span></span><span style="display:flex;"><span>  parameters <span style="color:#f92672">=</span> initialize_parameters([<span style="color:#ae81ff">784</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">10</span>])
+</span></span><span style="display:flex;"><span>  print(<span style="color:#e6db74">&#34;Length of parameters dictionary : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(len(parameters)))
+</span></span><span style="display:flex;"><span>  Length of parameters dictionary : <span style="color:#ae81ff">6</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  print(<span style="color:#e6db74">&#34;Training model...&#34;</span>)
+</span></span><span style="display:flex;"><span>  parameters <span style="color:#f92672">=</span> train(x_train, y_train, parameters, <span style="color:#ae81ff">0.01</span>, <span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>  Training model<span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  print(<span style="color:#e6db74">&#34;Testing model...&#34;</span>)
+</span></span><span style="display:flex;"><span>  print(<span style="color:#e6db74">&#39;Training error : &#39;</span>, end<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>  test(x_train, y_train, parameters)
+</span></span><span style="display:flex;"><span>  print(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Testing error : &#39;</span>, end<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>  test(x_test, y_test, parameters)
+</span></span><span style="display:flex;"><span>  Testing model<span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>  Training error : Accuracy : <span style="color:#ae81ff">98.791</span> <span style="color:#f92672">%</span>
+</span></span><span style="display:flex;"><span>  Testing error : Accuracy : <span style="color:#ae81ff">98.772</span> <span style="color:#f92672">%</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Handwritten characters classification</span>
+</span></span><span style="display:flex;"><span>  parameters <span style="color:#f92672">=</span> initialize_parameters([<span style="color:#ae81ff">784</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">27</span>])
+</span></span><span style="display:flex;"><span>  print(<span style="color:#e6db74">&#34;Length of parameters dictionary : </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(len(parameters)))
+</span></span><span style="display:flex;"><span>  Length of parameters dictionary : <span style="color:#ae81ff">6</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  print(<span style="color:#e6db74">&#34;Training model...&#34;</span>)
+</span></span><span style="display:flex;"><span>  parameters <span style="color:#f92672">=</span> train(X_train, y_train, parameters, <span style="color:#ae81ff">0.01</span>, <span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>  Training model<span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  print(<span style="color:#e6db74">&#34;Testing model...&#34;</span>)
+</span></span><span style="display:flex;"><span>  test(X_test, y_test, parameters)
+</span></span><span style="display:flex;"><span>  Testing model<span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>  Accuracy : <span style="color:#ae81ff">96.29629629629629</span> <span style="color:#f92672">%</span>
+</span></span></code></pre></div></li>
 </ol>
 
     </div>
