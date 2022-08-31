@@ -353,6 +353,100 @@ This database was created by researchers from Qatar Univeristy and Univeristy of
   Neural Style Transfer:
   <a href="#neural-style-transfer" class="h-anchor" aria-hidden="true">#</a>
 </h2>
+<p><img src="https://github.com/adni03/Neural-Style-Transfer/blob/main/circle_abstract.png?raw=true" alt=""></p>
+<p>Neural Style Transfer (NST) is an interesting optimization technique in deep learning. It merges to images: a &ldquo;content&rdquo; image (C) and a &ldquo;style&rdquo; image (S), to create a &ldquo;generated&rdquo; image (G).</p>
+<p>NST uses a previously trained convolutional network, and builds on top of that. This is called transfer learning. In this project, I will be using the VGG network from the original NST paper. Specifically, I will be using the VGG-19 network, a 19-layer version of the network. This model has been trained on the ImageNet dataset.</p>
+<ol>
+<li>
+<h4 id="style-cost-function">
+  Style Cost Function:
+  <a href="#style-cost-function" class="h-anchor" aria-hidden="true">#</a>
+</h4>
+<p>Firstly, to compute the &ldquo;style&rdquo; cost, we need to calculate the <strong>Gram</strong> matrix. This matrix gives us an idea of how <em>similar</em> two feature maps are. The formula to compute the Gram matrix is given below. It is just the dot product of the input vectors. We are interested in similarity since we want the <em>style</em> of the Style image and the Generated image to the similar.</p>
+<p>Next, once we have the Gram matrices calculated for the <strong>Style</strong> image and the <strong>Generated</strong> image, a squared difference can be taken with a normalization constant to obtain the Style loss for a particular layer.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>     <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gram_matrix</span>(A):
+</span></span><span style="display:flex;"><span>         GA <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>matmul(A, tf<span style="color:#f92672">.</span>transpose(A))
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">return</span> GA
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_layer_style_cost</span>(a_S, a_G):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>         _, n_H, n_W, n_C <span style="color:#f92672">=</span> a_G<span style="color:#f92672">.</span>get_shape()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>         a_S <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>transpose(tf<span style="color:#f92672">.</span>reshape(a_S, shape<span style="color:#f92672">=</span>[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, n_C]))
+</span></span><span style="display:flex;"><span>         a_G <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>transpose(tf<span style="color:#f92672">.</span>reshape(a_G, shape<span style="color:#f92672">=</span>[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, n_C]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>         GS <span style="color:#f92672">=</span> gram_matrix(a_S)
+</span></span><span style="display:flex;"><span>         GG <span style="color:#f92672">=</span> gram_matrix(a_G)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>         J_style_layer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>reduce_sum(tf<span style="color:#f92672">.</span>square(tf<span style="color:#f92672">.</span>subtract(GS, GG)), axis<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>)<span style="color:#f92672">/</span>((<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> n_W <span style="color:#f92672">*</span> n_H <span style="color:#f92672">*</span> n_C) <span style="color:#f92672">**</span> <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">return</span> J_style_layer
+</span></span></code></pre></div></li>
+<li>
+<h4 id="content-cost-function">
+  Content Cost Function:
+  <a href="#content-cost-function" class="h-anchor" aria-hidden="true">#</a>
+</h4>
+<p>In the shallower layers of a CNN, the model learns low level features whereas in the deeper layers, the model learns complex features. Hence, in the generated image, the content should match that of the input content image. This can be achieved by taking activations from the middle of the CNN.</p>
+<p>This cost can be computed by comparing the activations of the style image and the generated image.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>     <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_content_cost</span>(content_output, generated_output):
+</span></span><span style="display:flex;"><span>         a_C <span style="color:#f92672">=</span> content_output[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>         a_G <span style="color:#f92672">=</span> generated_output[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>         m, n_H, n_W, n_C <span style="color:#f92672">=</span> a_G<span style="color:#f92672">.</span>get_shape()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>         a_C_unrolled <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>reshape(a_C, shape<span style="color:#f92672">=</span>[m, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, n_C])
+</span></span><span style="display:flex;"><span>         a_G_unrolled <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>reshape(a_G, shape<span style="color:#f92672">=</span>[m, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, n_C])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>         J_content <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>reduce_sum(tf<span style="color:#f92672">.</span>square(tf<span style="color:#f92672">.</span>subtract(a_G_unrolled, a_G_unrolled)), axis<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>)<span style="color:#f92672">/</span>(<span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> n_W <span style="color:#f92672">*</span> n_C <span style="color:#f92672">*</span> n_H)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">return</span> J_content
+</span></span></code></pre></div></li>
+<li>
+<h4 id="total-cost">
+  Total Cost:
+  <a href="#total-cost" class="h-anchor" aria-hidden="true">#</a>
+</h4>
+<p>The total cost function is just a weighted sum of the Style Cost and the Content Cost.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>     <span style="color:#a6e22e">@tf</span><span style="color:#f92672">.</span>function()
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">total_cost</span>(J_content, J_style, alpha <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>, beta <span style="color:#f92672">=</span> <span style="color:#ae81ff">40</span>):
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">return</span> alpha <span style="color:#f92672">*</span> J_content <span style="color:#f92672">+</span> beta <span style="color:#f92672">*</span> J_style
+</span></span></code></pre></div></li>
+<li>
+<h4 id="optimization-loop">
+  Optimization Loop:
+  <a href="#optimization-loop" class="h-anchor" aria-hidden="true">#</a>
+</h4>
+<p>The various steps for solving the optimization problem are:</p>
+<ol>
+<li>Load the content image</li>
+<li>Load the style image</li>
+<li>Randomly initialize the image to be generated</li>
+<li>Load the VGG19 model</li>
+<li>Compute the content cost</li>
+<li>Compute the style cost</li>
+<li>Compute the total cost</li>
+<li>Define the optimizer and learning rate</li>
+</ol>
+<p>The training loop looks like:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.03</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@tf</span><span style="color:#f92672">.</span>function()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train_step</span>(generated_image):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> tf<span style="color:#f92672">.</span>GradientTape() <span style="color:#66d9ef">as</span> tape:
+</span></span><span style="display:flex;"><span>            a_G <span style="color:#f92672">=</span> vgg_model_outputs(generated_image)
+</span></span><span style="display:flex;"><span>            J_style <span style="color:#f92672">=</span> compute_style_cost(a_S, a_G)
+</span></span><span style="display:flex;"><span>            J_content <span style="color:#f92672">=</span> compute_content_cost(a_C, a_G)
+</span></span><span style="display:flex;"><span>            J <span style="color:#f92672">=</span> total_cost(J_content, J_style, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>, beta<span style="color:#f92672">=</span><span style="color:#ae81ff">40</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        grad <span style="color:#f92672">=</span> tape<span style="color:#f92672">.</span>gradient(J, generated_image)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        optimizer<span style="color:#f92672">.</span>apply_gradients([(grad, generated_image)])
+</span></span><span style="display:flex;"><span>        generated_image<span style="color:#f92672">.</span>assign(clip_0_1(generated_image))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> J
+</span></span></code></pre></div></li>
+</ol>
 <hr>
 <h2 id="facial-emotion-recognition">
   Facial Emotion Recognition:
